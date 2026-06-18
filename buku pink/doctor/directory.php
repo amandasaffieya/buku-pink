@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Doctor Dashboard</title>
+    <?php
+        session_start();
+
+        if (!isset($_SESSION["userID"])) {
+            echo "<script>alert('ERROR: Unable to fetch session, Please Try Again')</script>";
+            header("Location: ../login.php"); 
+            exit();
+        }
+        echo "sup " . $_SESSION["userID"];
+    ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -250,6 +260,15 @@
         }
         header input:hover,header a:hover{transform: translateY(-3px);opacity: 0.7; cursor: pointer;text-decoration: underline;}
     </style>
+    <script>
+        function logout (){
+            var choice = confirm("Leave the website?");
+            if (choice){
+                alert("See you again!");
+                window.location.href = "../login.php";
+            }
+        }
+    </script>
 </head>
 <body>
 
@@ -258,8 +277,8 @@
         <span>Klinik Kesihatan Chendering</span>
         <div class="link">
         <a href="doctor profile.php">Profile</a>
-        <a href="">About Us</a></div>
-        <input type="button" value="LOG OUT">
+        <a href="about us.php">About Us</a></div>
+        <input type="button" value="LOG OUT" onclick="logout()">
     </header>
 
     <div class="title">
@@ -340,8 +359,9 @@
                             echo "<td style='text-align: left; padding-left: 30px;'>". $row["fullName"]. "</td>";
                             echo "<td>". $row["icNum"]."</td>";
                             echo "<td><p class='risk " . strtolower($row["riskStatus"]) . "'>" . strtoupper($row["riskStatus"]) . "</p></td>";
+                            
                             echo "<td>
-                                    <a href='" . $row["patientID"] . "'>View</a>
+                                    <a href='dashboard.php?id=" . $row["patientID"] . "'>View</a>
                                 </td>";
                             echo "</tr>";
                             

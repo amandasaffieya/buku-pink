@@ -16,7 +16,7 @@
                 <a href="fmc.php">Fetal Movement Chart</a>
                 <a href="appointment.php">Appointment</a>
                 <a href="ultrasound.php">Ultrasound Gallery</a>
-                <p style="height: 100px;"></p>
+                <a href="directory.php">Back</a>
             </div>
         </div>
 

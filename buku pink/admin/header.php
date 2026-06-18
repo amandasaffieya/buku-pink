@@ -146,7 +146,7 @@
             align-items: center;
             justify-content: center;
         }
-        .user-list a,.role{
+        .user-list a,.role,.blue-button{
             text-decoration: none;
             color: white;
             font-weight: 600;
@@ -154,17 +154,17 @@
             height: 40px;
             margin: 0;
             border-radius: 30px;
-            display: inline-block; 
+            display: inline-flex; 
+            justify-content: center;
             width: 100px;          
             text-align: center;
             width: 150px;
             transition: opacity 0.2s;
         }
-        .user-list a{background: linear-gradient(270deg,  rgb(10, 14, 66), #14268c);}
-        .patient { background-color: #d6ffe0; border: 2px solid #076219; color: #076219;} 
+        .user-list a,.blue-button{background: linear-gradient(270deg,  rgb(10, 14, 66), #14268c);}
+        .role.patient { background-color: #d6ffe0; border: 2px solid #076219; color: #076219;} 
         .role.doctor  { background-color: #d6f3ff; border: 2px solid #005177; color: #004a86; }
         .role.admin   { background-color: #f8eaff; border: 2px solid #310054; color: #320062;}
-        .role.pending { background-color: #ffd6d6; border: 2px solid #430000; color: #4d0000;}
         .box-wrap{
         display: flex;
         justify-content: center;
@@ -199,6 +199,9 @@
             margin: 0;
             padding: 0;
         }
+        .pending-label{
+            color: #ff939a;
+        }
         .total-label{
             text-align: center;
             font-size: 20px;
@@ -206,6 +209,9 @@
             color: #39489b;
             margin: 0;
             padding: 0;
+        }
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.5);
         }
     </style>
     <script>

@@ -9,7 +9,7 @@
             var choice = confirm("Leave the website?");
             if (choice){
                 alert("See you again!");
-                window.location.href = "../index.php";
+                window.location.href = "../login.php";
             }
         }
     </script>

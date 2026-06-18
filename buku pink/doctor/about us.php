@@ -16,7 +16,7 @@
         }
 
         .contact-us {
-            background: linear-gradient(90deg,  rgb(10, 14, 66), #152684);            width: 100%;
+            background: linear-gradient(270deg,  rgb(0, 2, 32),rgb(0, 4, 60), rgb(0, 4, 96)); width: 100%;
             margin: 0;
             margin-top: 70px;
             opacity: 0.9;
@@ -99,7 +99,7 @@
     <div class="main-content"> 
         <h1 class="title-box"><span class="title">Meet The Team</span></h1>
         <div class="white-box">
-            <img src="../template/amanda-staff.png" class="pic">
+            <img src="../template/doctor-icon/amanda.png" class="pic">
             <div class="text-box">
                 <p><i>"Make mothers happy, that's all"</i></p>
                 <p style="font-size: 15px; opacity: 0.8;margin-left:15px">- Amanda Saffieya Binti Anis Shirwan</p>
@@ -108,7 +108,7 @@
             </div>
         </div>
         <div class="white-box">
-            <img src="../template/amanda-staff.png" class="pic">
+            <img src="../template/doctor-icon/amanda.png" class="pic">
             <div class="text-box">
                 <p><i>"Make mothers happy, that's all"</i></p>
                 <p style="font-size: 15px; opacity: 0.8;margin-left:15px">- Amanda Saffieya Binti Anis Shirwan</p>
@@ -117,7 +117,7 @@
             </div>
         </div>
         <div class="white-box">
-            <img src="../template/amanda-staff.png" class="pic">
+            <img src="../template/doctor-icon/amanda.png" class="pic">
             <div class="text-box">
                 <p><i>"Make mothers happy, that's all"</i></p>
                 <p style="font-size: 15px; opacity: 0.8;margin-left:15px">- Amanda Saffieya Binti Anis Shirwan</p>
@@ -126,7 +126,7 @@
             </div>
         </div>
         <div class="white-box">
-            <img src="../template/amanda-staff.png" class="pic">
+            <img src="../template/doctor-icon/amanda.png" class="pic">
             <div class="text-box">
                 <p><i>"Make mothers happy, that's all"</i></p>
                 <p style="font-size: 15px; opacity: 0.8;margin-left:15px">- Amanda Saffieya Binti Anis Shirwan</p>

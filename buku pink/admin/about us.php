@@ -65,6 +65,10 @@
         footer {
         margin-top: 0;
         padding: 10px 0;
+        width: 1400px;
+        }
+        header{
+            max-width: 1400px;
         }
         .text-box p {
             margin-top: 15px;    
@@ -100,7 +104,7 @@
     <div class="main-content"> 
         <h1 class="title-box"><span class="title">Meet The Team</span></h1>
         <div class="white-box">
-            <img src="../template/amanda-staff.png" class="pic">
+            <img src="../template/doctor-icon/amanda.png" class="pic">
             <div class="text-box">
                 <p><i>"Make mothers happy, that's all"</i></p>
                 <p style="font-size: 15px; opacity: 0.8;margin-left:15px">- Amanda Saffieya Binti Anis Shirwan</p>

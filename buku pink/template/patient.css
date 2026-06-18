@@ -136,7 +136,10 @@ header input:hover,header a:hover{transform: translateY(-3px);opacity: 0.7; curs
     column-gap: 20px;
     row-gap: 20px;    
 }
-
+.white-box {
+    background-color: #ffffff;
+    color:#d60d46;
+}
 
 .white-box,.card,.dark-box{
     border: 2px solid  #dc2458;
@@ -144,13 +147,7 @@ header input:hover,header a:hover{transform: translateY(-3px);opacity: 0.7; curs
     box-shadow: 0 4px 12px rgba(43, 45, 60, 0.052);
     transition: transform 0.3s ease-in-out;
 }
-.white-box {
-    background-color: #ffffff;
-    color:#d60d46;
-    border: 2px solid transparent; 
-}
-.white-box:hover{border-color: #d60d46;}
-.white-box:hover,.card:hover,.dark-box:hover,.title-box:hover{transform: translateY(-4px);}
+.white-box:hover,.card:hover,.dark-box:hover,.title-box:hover{transform: translateY(-3px);}
 .white-box,.card-body,.dark-box{padding: 3px 30px;}
 .card {
     background: linear-gradient(270deg,  #d60d46 0%, #ff4d6d 60%, #ff758f 100%);

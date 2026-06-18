@@ -9,7 +9,7 @@
             var choice = confirm("Leave the website?");
             if (choice){
                 alert("See you again!");
-                window.location.href = "../index.php";
+                window.location.href = "../login.php";
             }
         }
     </script>
@@ -19,7 +19,6 @@
         <img src="../template/logo-kkm.png" alt="logo">
         <span>Klinik Kesihatan Chendering</span>
         <div class="link">
-        <a href="patient profile.php">Profile</a>
         <a href="about us.php">About Us</a></div>
         <input type="button" value="LOG OUT" onclick="logout()">
     </header>

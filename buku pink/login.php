@@ -1,6 +1,15 @@
 <?php
-// 1. ALL LOGIC AND SESSIONS MUST INITIALIZE AT THE ABSOLUTE TOP OF THE FILE
+
 session_start();
+
+if (isset($_SESSION["fp_message"])) {
+    if ($_SESSION["fp_message"] === "success") {
+        $alert_message = "Request sent successfully! Please wait for admin to update your password.";
+    } else {
+        $alert_message = "No matching account found. Please check your IC Number, Email, and Role.";
+    }
+    unset($_SESSION["fp_message"]); 
+}
 
 if (isset($_POST["login"])) {
 
@@ -25,29 +34,36 @@ if (isset($_POST["login"])) {
     }
 
     $sql = "SELECT * FROM user WHERE icNum = '$icNum' AND password = '$password' AND role = '$role'";
-    $result = mysqli_query($connect, $sql);
+    $sendsql = mysqli_query($connect, $sql);
 
-    if (!$result) {
+    if (!$sendsql) {
         die("Database Error: " . mysqli_error($connect));
     }
 
-    if (mysqli_num_rows($result) > 0) {
+    if (mysqli_num_rows($sendsql) > 0) {
 
-        $_SESSION["icNum"] = $icNum;
-        $_SESSION["role"] = $role;
+        $user_data = mysqli_fetch_assoc($sendsql);
+        $_SESSION["userID"] = $user_data["userID"];
+        $pending = $user_data["pending"];
 
-        if ($role === "admin") {
+        if ($pending == 1) {
+            session_destroy();
+            $alert_message = "Your request is currently under review. Please wait while our team processes it..";
+        }else{
+            if ($role === "admin") {
             header("Location: admin/dashboard.php");
             exit();
+            }
+            if ($role === "doctor") {
+                header("Location: doctor/directory.php");
+                exit();
+            }
+            if ($role === "patient") {
+                header("Location: patient/dashboard.php");
+                exit();
+            }
         }
-        if ($role === "doctor") {
-            header("Location: doctor/dashboard.php");
-            exit();
-        }
-        if ($role === "patient") {
-            header("Location: patient/dashboard.php");
-            exit();
-        }
+        
 
     } else {
         $alert_message = "IC Number, Password, or Role is incorrect.";
@@ -201,7 +217,7 @@ if (isset($_POST["login"])) {
             outline: none;
         }
 
-        #button {
+        #button,button {
             font-size: 20px;
             border: none;
             border-radius: 8px;
@@ -241,6 +257,49 @@ if (isset($_POST["login"])) {
         a:hover {
             text-decoration: underline;
         }
+        .card-title {
+            font-size: 25px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            margin: 0;
+            color: white;
+            padding: 15px 30px 15px 30px;
+            background-color: rgb(255, 105, 130);
+        }
+        
+        .card-body {
+            background-color: #ffffff;
+            color: #9b001c;
+            font-weight: 600;
+            min-height: 50px;
+            padding: 20px;
+        }
+        .card{
+            background-color: white;
+        }
+        dialog {
+            border: none;
+            border-radius: 20px;
+            padding: 0;
+            background: transparent;
+        }
+
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        .radio-box{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            margin-top: 20px;
+        }
+        .input-wrap{
+            margin-bottom: 10px;
+            margin-left: 20px;
+        }
+       
     </style>
 </head>
 <body>
@@ -284,7 +343,7 @@ if (isset($_POST["login"])) {
                 <input type="password" name="password" id="textfield" required>
 
                 <p style="font-size:13px;">
-                    <a href="">Forgot your info?</a>
+                    <a href="#" onclick="document.getElementById('editCard').showModal()">Forgot your password?</a>
                 </p>
 
                 <input type="submit" id="button" value="Log In" name="login">
@@ -296,6 +355,38 @@ if (isset($_POST["login"])) {
             </p>
         </form>
     </div>
+  
+        <dialog id="editCard">
+    <div class="card">
+        <div class="card-title">Request Password Change?</div>
+
+        <div class="card-body" style="border-radius:30px">
+            <form action="admin/manage password.php" method="POST">
+                <input type="hidden" name="forgot_password" value="1">
+
+                <div class="input-wrap">
+                    IC Number &emsp;&emsp;&ensp; :
+                    <input type="text" name="icNum" placeholder="Enter IC Number" required> 
+                </div>
+                <div class="input-wrap">
+                    Email address &emsp; :
+                    <input type="email" name="email" placeholder="example@gmail.com" required> 
+                </div>
+               
+                <div class="radio-box">
+                <input type="radio" name="role" value="patient" checked> <label>Patient</label> &emsp;
+                <input type="radio" name="role" value="doctor"> <label>Doctor</label>&emsp;
+                <input type="radio" name="role" value="admin"> <label>Admin</label>&emsp;
+                </div>
+
+                <center>
+                    <button type="submit" name="forgotPassword" class="blue-button" style="font-size:20px;padding:10px;width:150px;">Send</button> &emsp;&emsp;
+                    <button type="button" class="blue-button cancelBtn" style="font-size:20px;padding:10px;width:150px;">Cancel</button>
+                </center>
+            </form>
+        </div>
+    </div>
+</dialog>
     
     <script>
     function showRole(role, clickedButton) {
@@ -332,6 +423,23 @@ if (isset($_POST["login"])) {
             document.getElementById("selectedRole").value = this.value;
         });
     });
+  
+    document.querySelectorAll(".editBtn").forEach(button => {
+        button.addEventListener("click", function () {
+            const userID = this.dataset.id;
+
+            document.getElementById("editUserID").value = userID;
+            document.getElementById("editCard").showModal();
+        });
+    });
+
+    document.querySelectorAll(".cancelBtn").forEach(button => {
+    button.addEventListener("click", function () {
+        document.getElementById("editCard").close();
+        window.location.href = "login.php";
+    });
+});
+     
     </script>
 </body>
 </html>

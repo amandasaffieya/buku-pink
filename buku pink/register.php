@@ -184,12 +184,19 @@
             font-weight: 500;
         }
         a:hover{ text-decoration: none;}
+        #errorMessage{
+            color: red;
+            margin: 0;
+            padding: 0;
+            margin-bottom: 30px;
+        }
     </style>
 </head>
 <body>
 
     <div class="register">
         <h1>Sign Up New Account</h1>
+        <center><p id = "errorMessage"></p></center>
         <form action="" method="POST">
             
             <fieldset>
@@ -197,27 +204,29 @@
 
                 <div class="form-group">
                     <label class="field-label">Full Name:</label>
-                    <input type="text" class="input-field" name="fullName" placeholder="Enter your full name" required>
+                    <input type="text" class="input-field" name="fullName"  value="<?php echo isset($_POST['fullName']) ? htmlspecialchars($_POST['fullName']) : ''; ?>" placeholder="Enter your full name" required>
                 </div>
 
                 <div class="form-group">
                     <label class="field-label">Email:</label>
-                    <input type="email" class="input-field" name="email" placeholder="example@gmail.com" required>
+                    <input type="email" class="input-field" name="email"  value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" placeholder="example@gmail.com" required>
                 </div>
 
                 <div class="form-group">
                     <label class="field-label">Phone Number:</label>
-                    <input type="tel" class="input-field" name="phoneNum" placeholder="xxx-xxxxxxx" pattern="[0-9]{3}-[0-9]{7,8}" required>
+                    <input type="tel" class="input-field" name="phoneNum"  value="<?php echo isset($_POST['phoneNum']) ? htmlspecialchars($_POST['phoneNum']) : ''; ?>" placeholder="xxx-xxxxxxx" pattern="[0-9]{3}-[0-9]{7,8}" required>
                 </div>
 
                 <div class="form-group">
                     <label class="field-label">IC Number:</label>
-                    <input type="text" class="input-field" name="icNum" placeholder="xxxxxx-xx-xxxx" required>
+                    <input type="text" class="input-field" name="icNum" value="<?php echo isset($_POST['icNum']) ? htmlspecialchars($_POST['icNum']) : ''; ?>" placeholder="xxxxxx-xx-xxxx" required>
                 </div>
 
                 <div class="form-group">
                     <label class="field-label">Address:</label>
-                    <textarea class="input-field" name="address" rows="3" placeholder="Enter your residential address" required></textarea>
+                    <textarea class="input-field" name="address" rows="3" placeholder="Enter your residential address" required><?php
+                        echo isset($_POST['address']) ? htmlspecialchars($_POST['address']) : '';
+                    ?></textarea>
                 </div>
 
                 <div class="form-group">
@@ -226,16 +235,21 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="field-label">Confirm Password:</label>
+                    <input type="password" class="input-field" name="confirmPassword" placeholder="Retype the password" required>
+                </div>
+
+                <div class="form-group">
                     <label class="field-label">Role:</label>
                     <div class="radio">
                         <label class="radio-label">
-                            <input type="radio" name="role" value="patient" onclick="showField()" required> Patient
+                            <input type="radio" name="role" value="patient" onclick="showField()" required <?php if (isset($_POST['role']) && $_POST['role'] == 'patient') echo 'checked'; ?>> Patient
                         </label> &ensp;
                         <label class="radio-label">
-                            <input type="radio" name="role" value="doctor" onclick="showField()"> Doctor
+                            <input type="radio" name="role" value="doctor" onclick="showField()" <?php if (isset($_POST['role']) && $_POST['role'] == 'patient') echo 'checked'; ?>> Doctor
                         </label> &ensp;
                         <label class="radio-label">
-                            <input type="radio" name="role" value="admin" onclick="showField()"> Admin
+                            <input type="radio" name="role" value="admin" onclick="showField()" <?php if (isset($_POST['role']) && $_POST['role'] == 'patient') echo 'checked'; ?>> Admin
                         </label>
                     </div>
                 </div>
@@ -277,19 +291,19 @@
                     <div class="form">
                         <label class="field-label">Gender:</label>
                         <div class="radio-inline-group">
-                            <label class="radio-label"><input type="radio" name="gender" value="Male"> Male</label>
+                            <label class="radio-label"><input type="radio" name="gender" value="Male"> Male</label>&emsp;
                             <label class="radio-label"><input type="radio" name="gender" value="Female"> Female</label>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="field-label">License Number:</label>
-                        <input type="text" class="input-field" name="licenseNo" placeholder="Enter medical license number">
+                        <input type="text" class="input-field" name="licenseNo" placeholder="Enter medical license number" value="<?php echo isset($_POST['licenseNo']) ? htmlspecialchars($_POST['licenseNo']) : ''; ?>">
                     </div>
 
                     <div class="form-group">
                         <label class="field-label">Specialization:</label>
-                        <input type="text" class="input-field" name="specialization" placeholder="e.g. Obstetrics & Gynecology">
+                        <input type="text" class="input-field" name="specialization" placeholder="e.g. Obstetrics & Gynecology" value="<?php echo isset($_POST['specialization']) ? htmlspecialchars($_POST['specialization']) : ''; ?>">
                     </div>
                 </fieldset>
             </div>
@@ -306,11 +320,11 @@
                     </div>
                 </fieldset>
             </div>
-
+            
             <div class="center-btn-container">
                 <input type="submit" id="button" name="submit" value="Create Account">
             </div>
-            <center><p>Already have an account? <a href="index.php">Log In</a></p></center>
+            <center><p>Already have an account? <a href="login.php">Log In</a></p></center>
         </form>
     </div>
     
@@ -321,7 +335,6 @@
             
             let role = checkedRole.value;
 
-            // Instantly clear displays before evaluating state toggles
             document.getElementById("doctorField").style.display = "none";
             document.getElementById("patientField").style.display = "none";
             document.getElementById("adminField").style.display = "none";
@@ -346,20 +359,51 @@
         $icNum = $_POST['icNum'];
         $address = $_POST['address'];
         $password = $_POST['password'];
+        $confirmPassword = $_POST['confirmPassword'];
         $role = $_POST['role'];
-
         $fullName = strtoupper($fullName);
         $icNum = str_replace('-','',$icNum);
 
-        $sql = "INSERT INTO user(fullName,email,phoneNum,icNum,address,password,role)
-        VALUES('$fullName','$email','$phoneNum','$icNum','$address','$password','$role')";
-        $sendsql = mysqli_query($connect,$sql);
+        $sql = "SELECT * FROM user WHERE email = '$email' AND role = '$role'";
+        $sendsql = mysqli_query($connect, $sql);
 
-        if (!$sendsql) {
-        die("User table insertion failed: " . mysqli_error($connect));
-        }
+ if ($password !== $confirmPassword) {
+        echo "<script>document.getElementById('errorMessage').innerHTML='ERROR: Passwords do not match, please try again.';</script>";
+        exit();
+    }
 
-        $userID = mysqli_insert_id($connect);
+    $sql = "SELECT * FROM user WHERE email='$email' AND role='$role'";
+    $result = mysqli_query($connect, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        echo "<script>alert('Email registered already, please log in with your registered account.'); window.location.href='login.php';</script>";
+        exit();
+    }
+
+    $sql = "SELECT * FROM user WHERE icNum='$icNum' AND role='$role'";
+    $result = mysqli_query($connect, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        echo "<script>alert('IC Number registered already, please log in with your registered account.'); window.location.href='login.php';</script>";
+        exit();
+    }
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    if ($role == 'patient'){
+        $sql = "INSERT INTO user(fullName,email,phoneNum,icNum,address,password,role,pending)
+            VALUES('$fullName','$email','$phoneNum','$icNum','$address','$hashedPassword','$role',0)";
+    } else{
+        $sql = "INSERT INTO user(fullName,email,phoneNum,icNum,address,password,role,pending)
+            VALUES('$fullName','$email','$phoneNum','$icNum','$address','$hashedPassword','$role',1)";
+    }
+    $result = mysqli_query($connect, $sql);
+
+    if (!$result) {
+        die(mysqli_error($connect));
+    }
+
+    $userID = mysqli_insert_id($connect);
+
 
         if ($role === 'patient'){//PATIENT INFO
             $bloodType = $_POST['bloodType'];
@@ -390,7 +434,8 @@
                 VALUES ('$patientID','ACTIVE','$hivStatus','$riskStatus','$lmpDate')";
                 $sendsql = mysqli_query($connect,$sql);
 
-                if (!$sendsql) {echo mysqli_error($connect);}
+                if (!$sendsql) {echo mysqli_error($connect);
+                }else{echo "<script>alert('Login successful! Start logging in with your new account'); window.location.href = 'login.php';</script>";}
             }
 
         }else if($role === 'doctor'){ //DOCTOR INFO
@@ -403,7 +448,8 @@
             VALUES ('$userID','$gender','$licenseNo','$specialization')";
             $sendsql = mysqli_query($connect,$sql);
 
-            if (!$sendsql) {echo mysqli_error($connect);}
+            if (!$sendsql) {echo mysqli_error($connect);
+            } else {echo "<script>alert('Login successful! Start logging in with your new account'); window.location.href = 'login.php';</script>";}
 
         }else if($role === 'admin'){ //ADMIN INFO
 
@@ -412,7 +458,8 @@
             VALUES ('$userID','$gender')";
             $sendsql = mysqli_query($connect,$sql);
 
-            if(!$sendsql) {echo mysqli_error($connect);}
+            if(!$sendsql) {echo mysqli_error($connect);
+            }else{echo "<script>alert('Login successful! Start logging in with your new account'); window.location.href = 'login.php';</script>";}
         }
     }
 

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +15,6 @@
             header("Location: ../login.php"); 
             exit();
         }
-        echo $_SESSION["userID"];
         $userID = $_SESSION["userID"];
     ?>
     <style>
@@ -324,11 +325,12 @@
         .appt-banner,.view-profile-btn{
             cursor: pointer;
             border: 2px solid transparent;
-            transition: border-color 0.3s ease, opacity 0.3s ease;
+            transition: border-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease-in-out;
         }
         .appt-banner:hover,.view-profile-btn:hover{
             border-color: #ffffff;
             opacity: 0.8;
+            transform: scale(0.99);
         }
             
 
@@ -359,9 +361,13 @@
                 WHERE u.userID = '$userID'";
 
         $sendsql = mysqli_query($connect,$sql);
+       
         if (!$sendsql){
             echo mysqli_error($connect);
+
+            
         } elseif (mysqli_num_rows($sendsql) > 0){
+            
             foreach($sendsql as $row){
                 $gestationalAge = $row["gestationalAge"]; 
                 $pregStatus = $row["pregStatus"];
@@ -609,8 +615,8 @@
     </div>
 </div>
 <?php 
-            } 
-        }
+            } // End of foreach
+        } // End of elseif 
         ?>
   
     <footer>

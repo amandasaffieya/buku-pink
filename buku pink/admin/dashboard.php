@@ -5,33 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../template/staff.css">
     <title>Health Profile</title>
-    
     <?php
-        function countUser($role) {
-        require __DIR__ . "/../db_connect.php";
+        session_start();
 
-        if ($role == "user") {
-            $sql = "SELECT COUNT(*) AS total FROM user";
-        } else {
+        if (!isset($_SESSION["userID"])) {
+            header("Location: ../login.php"); 
+            exit();
+        }
+        if (isset($_GET['id'])) {
+            $_SESSION["patientID"] = $_GET['id'];
+        }
+
+        function countPending() {
+            require __DIR__ . "/../db_connect.php";
+            $sql = "SELECT COUNT(*) AS total FROM user WHERE pending = 1";
+            $sendsql = mysqli_query($connect, $sql); 
+            
+            if (!$sendsql) {
+                echo mysqli_error($connect);
+            } else {
+                $row = mysqli_fetch_assoc($sendsql);
+                echo "<p class='count-label pending-label'>" . $row['total'] . "</p>";
+            }
+        }
+        function countPassReq(){
+            require __DIR__ . "/../db_connect.php";
+            $sql = "SELECT COUNT(*) AS total FROM user WHERE forgot_pass = 1";
+            $sendsql = mysqli_query($connect, $sql); 
+            
+            if (!$sendsql) {
+                echo mysqli_error($connect);
+            } else {
+                $row = mysqli_fetch_assoc($sendsql);
+                echo "<p class='count-label pending-label' style = 'color:#96df96;'>" . $row['total'] . "</p>";
+            }
+        }
+
+        function countUser($role) {
+            require __DIR__ . "/../db_connect.php";
+
             $sql = "SELECT COUNT(*) AS total
                     FROM user
-                    WHERE role = '$role'";
-        }
-        $sendsql = mysqli_query($connect, $sql);
+                    WHERE role = '$role' AND pending = 0";
 
-        if (!$sendsql) {
-            echo mysqli_error($connect);
-        } else {
-            $row = mysqli_fetch_assoc($sendsql);
-            echo "<p class='count-label'>" . $row['total'] . "</p>";
+            $sendsql = mysqli_query($connect, $sql);
+
+            if (!$sendsql) {
+                echo mysqli_error($connect);
+            } else {
+                $row = mysqli_fetch_assoc($sendsql);
+                echo "<p class='count-label'>" . $row['total'] . "</p>";
+            }
         }
-}
         
     ?>
+ 
 </head>
 <body>
+    
 
-    <?php include "header.php"; ?>
+    <?php include "header.php";?>
+    
     <div class="menu-links" style="width: 280px;">
                 <div class="menu-label">
                     <img src="moon.png" alt="crescent" id="moon-logo">
@@ -39,7 +73,7 @@
                 </div>
                 <a href="dashboard.php" class="active">Dashboard</a>
                 <a href="manage user.php">Manage User</a>
-                <a href="report.php">Generate Report</a>
+                <a href="manage password.php">Manage Password</a>
                 <p style="height: 100px;"></p>
             </div>
         </div>
@@ -54,20 +88,20 @@
 
     <div class="box-wrap">
         <div class="white-box" id="counter">
-        <p class="total-label">Total User</p>
-        <?php countUser('user'); ?>
+        <p class="total-label">Total Doctor</p>
+        <?php countUser('doctor'); ?>
     </div>
     <div class="white-box" id="counter">
         <p class="total-label">Total Patient</p>
         <?php countUser('patient'); ?>
     </div>
     <div class="white-box" id="counter">
-        <p class="total-label">Total Doctor</p>
-        <?php countUser('doctor'); ?>
+        <p class="total-label">Password Reset Request</p>
+        <?php countPassReq(); ?>
     </div>
     <div class="white-box" id="counter">
         <p class="total-label">Pending Request</p>
-        <?php countUser('pending'); ?>
+        <?php countPending(); ?>
     </div>
     </div>
        <div class="list-box" style="width: 1300px;margin-top:20px">
@@ -78,6 +112,7 @@
                     <option value="">Search by</option>
                     <option value="name">NAME</option>
                     <option value="ic">IC NUMBER</option>
+                    <option value="role">ROLE</option>
                 </select>
                 <input type="text" name="search" id="search" placeholder="Search a patient here...">
                 <input type="submit" name="submit" value="🔎" id="button">
@@ -88,7 +123,7 @@
 
         <div class="user-list">
             <?php
-            $sql = "SELECT userID, fullName, icNum, role
+            $sql = "SELECT *
                     FROM user";
 
             $show = true;
@@ -103,10 +138,12 @@
                     $sql .= " WHERE fullName LIKE '%$search%'";
                 } else if ($category === "ic"){
                     $sql .= " WHERE icNum LIKE '$search'";
-                } else {echo "<p id = 'error'>Please choose a category to search patient.</p>";$show = false;}
+                }else if ($category === "role"){
+                    $sql .= " WHERE role LIKE '$search'";
+                }else {echo "<p id = 'error'>Please choose a category to search patient.</p>";$show = false;}
                 }
             } 
-            $sql .= " ORDER BY role ASC";
+            $sql .= " ORDER BY pending DESC,forgot_pass DESC,role ASC";
             if ($show === true) { showTable($sql);}
 
             function showTable($sql){
@@ -125,8 +162,15 @@
                         </tr>";
 
                         foreach($sendsql as $row){
-                            
-                            echo "<tr class = 'row-border'>";
+                            $style = "";
+
+                            if ($row["pending"] == 1) {
+                                $style = "style='background-color: #ffd9d9;'";
+                            } elseif ($row["forgot_pass"] == 1) {
+                                $style = "style='background-color: #d9ffd9;'";
+                            }
+                            echo "<tr class='row-border' $style>";
+
                             echo "<td>". $row["userID"]."</td>";
                             echo "<td style='text-align: left; padding-left: 30px; width:600px'>". $row["fullName"]. "</td>";
                             echo "<td>". $row["icNum"]."</td>";
@@ -135,21 +179,23 @@
                             echo "</tr>";
                         }
                         echo "</table>";
-                    }else{echo "<p id = 'error'>No matching patient records found.</p>";}
+                    }else{echo "<p id = 'error'>No matching records found.</p>";}
                 }else{echo mysqli_error($connect);}
             }
 
             function linkProfile($role, $userID){
-    if ($role === "patient"){
-        echo "<td><a id='view' href='../patient/patient profile.php?userID=$userID'>View</a></td>";
-    } else if ($role === "doctor"){
-        echo "<td><a id='view' href='../doctor/doctor profile.php?userID=$userID'>View</a></td>";
-    } else if ($role === "admin"){
-        echo "<td><a id='view' href='../admin/admin profile.php?userID=$userID'>View</a></td>";
-    } else {
-        echo "<td>-</td>";
-    }
-}
+                if ($role === "patient"){
+                    echo "<td><a id='view' href='../patient/patient profile.php?userID=$userID'>View</a></td>";
+                } else if ($role === "doctor"){
+                    echo "<td><a id='view' href='../doctor/doctor profile.php?userID=$userID'>View</a></td>";
+                } else if ($role === "admin"){
+                    echo "<td><a id='view' href='../admin/admin profile.php?userID=$userID'>View</a></td>";
+                } else {
+                    echo "<td>-</td>";
+                }
+            }
+ 
+
             ?>
         </div>
     </div>
