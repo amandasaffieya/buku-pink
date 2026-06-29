@@ -308,6 +308,8 @@ if (isset($_POST["login"])) {
         <script>alert("<?php echo $alert_message; ?>");</script>
     <?php endif; ?>
 
+    <audio src="template/music.mp3" autoplay hidden id="audioMusic"></audio>
+
     <div class="login">
         <form action="" method="POST">
 
@@ -439,6 +441,9 @@ if (isset($_POST["login"])) {
         window.location.href = "login.php";
     });
 });
+
+const audio = document.getElementById("audioMusic");
+audio.volume = 0.2;
      
     </script>
 </body>

@@ -7,6 +7,7 @@
     <title>Health Profile</title>
     <?php
         session_start();
+         include "header.php";
 
         if (!isset($_SESSION["userID"])) {
             header("Location: ../login.php"); 
@@ -58,13 +59,41 @@
             }
         }
         
-    ?>
- 
+            ?>
+            <?php  
+            require __DIR__ . "/../db_connect.php";
+            $userID = $_SESSION["userID"];
+
+                $sql = "SELECT fullName FROM user WHERE userID = '$userID' AND role = 'admin'";
+                $sendsql = mysqli_query($connect,$sql);	
+                $row = mysqli_fetch_array($sendsql);
+                $adminName = $row["fullName"];
+                $adminName = explode(" ", trim($adminName))[0];
+                $adminName = ucfirst(strtolower($adminName));
+            ?>
+            <style>
+                .white-box{
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease, transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            }
+            .white-box:hover{
+                border-color: #152684;
+                transform: translateY(-4px);
+                background-color: #e6eaff;
+            }
+            #subtitle,.list-box,.role,.list-box a{ transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, background-color 0.3s ease-in-out;}
+            #subtitle:hover,.list-box:hover,.role:hover,.list-box a:hover{cursor: pointer;transform: translateY(-4px);}
+            .role.patient,.role.doctor,.role.admin {transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;}
+
+            .role.patient:hover { background-color: #078125; border: 2px solid #ffffff; color: #ffffff;} 
+            .role.doctor:hover  { background-color: #035f87; border: 2px solid #ffffff; color: #ffffff; }
+            .role.admin:hover   { background-color: #490c67; border: 2px solid #ffffff; color: #ffffff;}
+
+            </style>
 </head>
 <body>
     
-
-    <?php include "header.php";?>
     
     <div class="menu-links" style="width: 280px;">
                 <div class="menu-label">
@@ -80,7 +109,7 @@
 
     <div class="main-content" style="margin: 0;">
     <h1 class="title-box" style="margin-top: 40px; margin-bottom: 5px; text-align: center;">
-        <span class="title" style="font-size: 80px;">Welcome back, Admin!</span>
+        <span class="title" style="font-size: 80px;">Welcome back, <?php echo $adminName; ?></span>
     </h1> 
     <p id="subtitle">
         Administrative console for the Maternal Health Record System

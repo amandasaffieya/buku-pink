@@ -257,10 +257,13 @@ td{
                         </tr>";
 
                         foreach($sendsql as $row){
+
+                        $password = password_hash($row["password"],PASSWORD_DEFAULT);
+
                             echo "<tr class='row-border'>";
                             echo "<td>" . $row["userID"] . "</td>";
                             echo "<td style='text-align:left; padding-left:10px;'>" . $row["fullName"] . "</td>";
-                            echo "<td>" . substr($row["password"], 0, 13) . "</td>";
+                            echo "<td>" . substr($password, 0, 13) . "</td>";
                             echo "<td><span class='role " . strtolower($row["role"]) . "'>" . strtoupper($row["role"]) . "</span></td>";
                             echo "<td><button class='blue-button editBtn' data-id='" . $row["userID"] . "'>UPDATE</button></td>";  
                             echo "<td><a href='mailto:" . $row["email"] . "' class='blue-button'>CONTACT</a></td>";    

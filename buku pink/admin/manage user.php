@@ -312,7 +312,7 @@ button{font-size: 17px;}
             $sendsql = "UPDATE user SET role = '$newRole', pending = '$newStatus' WHERE userID = '$editUserID'";
             
             if (mysqli_query($connect, $sendsql)) {
-                header("Location: manage user.php");
+                echo "<script>alert('Pending status has been updated'); window.location.href = 'manage user.php';</script>";
                 exit();
             } else {
                 echo "<script>alert('Error updating record: " . mysqli_error($connect) . "');</script>";

@@ -69,8 +69,80 @@
             margin-top: 15px;    
             margin-bottom: 5px; 
         }
+        .vid-wrap {
+            position: relative;
+            height: 300px;
+            width: 100%;
+            overflow: hidden;
+            background: black; 
+        }
 
-    
+        .vid-wrap video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+            
+
+            .vid-wrap .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 400px;
+            height: 100%;
+            background: #02136f; 
+            color: white;
+            padding: 30px;
+            }
+            .vid-wrap .overlay2 {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100%;
+            background: #02136f; 
+            color: white;
+            padding: 30px;
+            }
+
+            .vm-hero {
+                position: relative;
+                height: 300px;
+                width: 100%;
+                overflow: hidden;
+            }
+            .vm-hero video {
+                width: 100%; height: 100%;
+                object-fit: cover;
+                position: absolute; inset: 0;
+            }
+            .vm-side-box {
+                position: absolute;
+                top: 0; bottom: 0;
+                width: 320px;
+                background: #02126f90;
+                display: flex; flex-direction: column;
+                justify-content: center;
+                padding: 32px 28px;
+                color: white;
+                z-index: 2;
+            }
+            .vm-side-left  { left: 0;  border-radius: 0 20px 20px 0; }
+            .vm-side-right { right: 0; border-radius: 20px 0 0 20px; }
+            .vm-side-box h2 { font-size: 26px; font-weight: 600; margin: 0 0 8px; }
+            .vm-side-box p  { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.9); margin: 0; }
+            .vm-dots { width: 36px; height: 4px; background: rgba(255,255,255,0.5); border-radius: 999px; margin: 10px 0; }
+            .title-box {
+                margin-top: 25px;  
+                margin-left: 50px;
+                margin-bottom: 10px;
+            }
+            .main-content {
+                margin: 0;
+                padding: 0;
+                padding-top:0;
+                
+            }
     </style>
     <script>
         function logout (){
@@ -97,6 +169,30 @@
         </div>
 
     <div class="main-content"> 
+
+    <h1 class="title-box"><span class="title">About Us</span></h1>
+        <div class="vm-hero">
+        <video autoplay muted loop>
+            <source src="../template/vid1.mp4" type="video/mp4">
+        </video>
+        <div class="vm-side-box vm-side-left">
+            <h1>VISION</h1>
+            <div class="vm-dots"></div>
+            <p>To become a leading provider of quality healthcare services. It aims to ensure safe, efficient and accessible healthcare for all individuals.</p>
+        </div>
+        </div>
+
+        <div class="vm-hero">
+        <video autoplay muted loop>
+            <source src="../template/vid2.mp4" type="video/mp4">
+        </video>
+        <div class="vm-side-box vm-side-right">
+            <h1>MISSION</h1>
+            <div class="vm-dots"></div>
+            <p>To provide comprehensive and affordable healthcare services to the community with a goal to improve the overall health and quality of life.</p>
+        </div>
+        </div>
+
         <h1 class="title-box"><span class="title">Meet The Team</span></h1>
         <div class="white-box">
             <img src="../template/doctor-icon/amanda.png" class="pic">

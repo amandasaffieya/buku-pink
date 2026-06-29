@@ -7,12 +7,12 @@
     <?php
         session_start();
 
+      
         if (!isset($_SESSION["userID"])) {
-            echo "<script>alert('ERROR: Unable to fetch session, Please Try Again')</script>";
             header("Location: ../login.php"); 
             exit();
         }
-        echo "sup " . $_SESSION["userID"];
+        $userID = $_SESSION["userID"];
     ?>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -260,6 +260,18 @@
         }
         header input:hover,header a:hover{transform: translateY(-3px);opacity: 0.7; cursor: pointer;text-decoration: underline;}
     </style>
+    <?php  
+    require __DIR__ . "/../db_connect.php";
+       $userID = $_SESSION["userID"];
+
+		$sql = "SELECT fullName FROM user WHERE userID = '$userID' AND role = 'doctor'";
+		$sendsql = mysqli_query($connect,$sql);	
+        $row = mysqli_fetch_array($sendsql);
+        $doctorName = $row["fullName"];
+        $doctorName = explode(" ", trim($doctorName))[0];
+        $doctorName = ucfirst(strtolower($doctorName));
+    ?>
+
     <script>
         function logout (){
             var choice = confirm("Leave the website?");
@@ -284,7 +296,7 @@
     <div class="title">
         
         <div class="welcome-section">
-            <h1>Welcome, Dr Hanun</h1>
+            <h1>Welcome, Dr <?php echo $doctorName;?></h1>
             <h5>Select patient to begin...</h5>
         </div>
 
@@ -361,7 +373,7 @@
                             echo "<td><p class='risk " . strtolower($row["riskStatus"]) . "'>" . strtoupper($row["riskStatus"]) . "</p></td>";
                             
                             echo "<td>
-                                    <a href='dashboard.php?id=" . $row["patientID"] . "'>View</a>
+                                    <a style='font-weight:700' href='dashboard.php?id=" . $row["patientID"] . "'>VIEW</a>
                                 </td>";
                             echo "</tr>";
                             
